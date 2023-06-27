@@ -1,4 +1,4 @@
-package historias.clinicas
+package turnosMedicos
 
 import grails.boot.GrailsApp
 import grails.boot.config.GrailsAutoConfiguration

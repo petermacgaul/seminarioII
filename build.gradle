@@ -12,7 +12,7 @@ buildscript {
 }
 
 version "0.1"
-group "historias.clinicas"
+group "turnosmedicos"
 
 apply plugin:"eclipse"
 apply plugin:"idea"

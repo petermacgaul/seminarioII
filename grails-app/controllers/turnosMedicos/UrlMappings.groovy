@@ -1,4 +1,4 @@
-package historias.clinicas
+package turnosMedicos
 
 class UrlMappings {
 

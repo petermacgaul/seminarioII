@@ -1,4 +1,4 @@
-package historias.clinicas
+package turnosMedicos
 
 import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
@@ -11,8 +11,4 @@ class HistoriaClinicaSpec extends Specification implements DomainUnitTest<Histor
     def cleanup() {
     }
 
-    void "test something"() {
-        expect:"fix me"
-            true == false
-    }
 }
