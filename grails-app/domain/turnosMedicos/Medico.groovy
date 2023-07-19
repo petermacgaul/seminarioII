@@ -44,4 +44,10 @@ class Medico {
         turnos << turno
         turno
     }
+
+    boolean pacienteEstaBloqueado(Paciente paciente) {
+        return turnos.any { Turno turno ->
+            turno.pacienteEstaEnListaDeBloqueados(paciente)
+        }
+    }
 }

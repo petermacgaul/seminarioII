@@ -11,6 +11,7 @@ class Turno {
 
     String lugar
     Integer duracionEnMinutos
+    Set<Paciente> pacientesBloqueados = []
 
     static constraints = {
         fechaYHora nullable: true
@@ -18,6 +19,10 @@ class Turno {
         lugar nullable: false, blank: false
         duracionEnMinutos nullable: false, blank: false, min: 0, max: 240
     }
+
+    static hasMany = [
+            pacientesBloqueados: Paciente,
+    ]
 
     Turno(Medico medico, LocalDateTime fechaYHora, String lugar, Integer duracionEnMinutos) {
         if (medico == null) throw new TurnoCreacionException("medico no puede ser vacio")
@@ -41,7 +46,24 @@ class Turno {
         this.paciente == null
     }
 
+    Boolean pacienteEstaBloqueado(Paciente paciente) {
+        this.medico.pacienteEstaBloqueado(paciente)
+    }
+
+    Boolean pacienteEstaEnListaDeBloqueados(Paciente paciente) {
+        return pacientesBloqueados.any { Paciente pacienteBloqueado ->
+            pacienteBloqueado.id == paciente.id
+        }
+    }
+
     void cancelar() {
+        if (this.paciente == null){
+            throw new CancelarTurnoException();
+        }
         this.paciente = null;
+    }
+
+    void bloquearPaciente(Paciente paciente) {
+        pacientesBloqueados << paciente
     }
 }

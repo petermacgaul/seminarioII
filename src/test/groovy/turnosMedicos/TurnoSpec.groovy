@@ -25,7 +25,7 @@ class TurnoSpec extends Specification implements DomainUnitTest<Turno> {
     def cleanup() {
     }
 
-    void "US1.1 - Reservar turno exitosamente"() {
+    void "US1.1 - Reserva de turno - Reservar turno exitosamente"() {
 
         LocalDateTime fechaDelTurno = LocalDateTime.parse("16/08/2023 14:00:00", dateTimeFormatter);
 
@@ -42,7 +42,7 @@ class TurnoSpec extends Specification implements DomainUnitTest<Turno> {
         assert turno.paciente.apellido == paciente.apellido
     }
 
-    void "US1.2 - Reservar segundo turno de misma especialidad falla"() {
+    void "US1.2 - Reserva de turno - Reservar segundo turno de misma especialidad falla"() {
 
         LocalDateTime fechaDelTurno = LocalDateTime.parse("16/08/2023 14:00:00", dateTimeFormatter);
         LocalDateTime fechaDelOtroTurno = LocalDateTime.parse("17/08/2023 14:00:00", dateTimeFormatter);
@@ -60,7 +60,7 @@ class TurnoSpec extends Specification implements DomainUnitTest<Turno> {
         thrown(ReservaDeTurnosException)
     }
 
-    void "US2.0 - Dado que soy un paciente, tengo un turno reservado, cuando cancelo el turno, entonces no veo más ese turno registrado."() {
+    void "US2.0 - Cancelar turno - Dado que soy un paciente, tengo un turno reservado, cuando cancelo el turno, entonces no veo más ese turno registrado."() {
 
         LocalDateTime fechaDelTurno = LocalDateTime.parse("16/08/2023 14:00:00", dateTimeFormatter);
         Turno turno = medico.crearTurno(fechaDelTurno, "Hospital Italiano", 30)
@@ -76,7 +76,7 @@ class TurnoSpec extends Specification implements DomainUnitTest<Turno> {
         assert turno.paciente == null
     }
 
-    void "US2.1 - Dado que soy un paciente, tengo un turno reservado, cuando cancelo el turno reservado, entonces otro paciente puede reservarlo."() {
+    void "US2.1 - Cancelar turno - Dado que soy un paciente, tengo un turno reservado, cuando cancelo el turno reservado, entonces otro paciente puede reservarlo."() {
 
         LocalDateTime fechaDelTurno = LocalDateTime.parse("16/08/2023 14:00:00", dateTimeFormatter);
 
@@ -94,6 +94,27 @@ class TurnoSpec extends Specification implements DomainUnitTest<Turno> {
         assert otroPaciente.turnos.size() == 1
         assert paciente.turnos.size() == 0
         assert turno.paciente != null
+    }
+
+    void "US5.1 - Bloquear paciente - Dado que soy un paciente y cancelo el turno del médico traumatólogo en menos de 72 horas, cuando reservo un turno del médico traumatólogo el mismo mes, entonces me muestra un error que no puedo tomar turnos de este médico durante este mes."() {
+
+        LocalDateTime diaDeHoy = LocalDateTime.parse("13/08/2023 14:00:01", dateTimeFormatter);
+
+        LocalDateTime fechaDelTurno = LocalDateTime.parse("16/08/2023 14:00:00", dateTimeFormatter);
+        LocalDateTime fechaDelOtroTurno = LocalDateTime.parse("17/08/2023 14:00:00", dateTimeFormatter);
+
+        Turno turno = medico.crearTurno(fechaDelTurno, "Hospital Italiano", 30)
+        Turno otroTurnoElMisMes = medico.crearTurno(fechaDelOtroTurno, "Hospital Italiano", 30)
+
+        given: "Dado un paciente y un turno cancelado por el paciente en menos de 72 horas"
+        paciente.reservarTurno(turno)
+        paciente.cancelarTurno(turno, diaDeHoy)
+
+        when: "cuando reservo un turno del médico traumatólogo el mismo mes"
+        paciente.reservarTurno(otroTurnoElMisMes)
+
+        then: "entonces me muestra un error que no puedo tomar turnos de este médico durante este mes"
+        thrown(PacienteBloqueadoException)
     }
 
 }

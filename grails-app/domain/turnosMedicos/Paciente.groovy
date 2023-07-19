@@ -11,9 +11,11 @@ class Paciente {
     String email
     LocalDate fechaDeNacimiento
     Set<Turno> turnos = []
+    //LocalDateTime diaDeHoy
 
     static hasMany = [
             turnos: Turno,
+            turnosCancelados: Turno,
     ]
 
     static constraints = {
@@ -36,6 +38,7 @@ class Paciente {
         this.dni = dni
         this.email = email
         this.fechaDeNacimiento = fechaDeNacimiento
+        //this.diaDeHoy = LocalDateTime.now()
     }
 
     Turno reservarTurno(Turno turno) {
@@ -47,16 +50,28 @@ class Paciente {
         boolean tengoTurnoDeMismaEspecialidadElMismoMes = turnos.any { Turno turnoReservado ->
             turnoReservado.medico.especialidad == turno.medico.especialidad
         }
-
         if (tengoTurnoDeMismaEspecialidadElMismoMes) throw new TurnoMismaEspecializacionException()
+
+        boolean pacienteEstaBloqueado = turno.pacienteEstaBloqueado(this);
+        if (pacienteEstaBloqueado) throw new PacienteBloqueadoException()
 
         turno.paciente = this
         turnos << turno
         turno
     }
 
-    void cancelarTurno(Turno turno) {
+    void cancelarTurno(Turno turno, LocalDateTime diaDeHoy = null) {
+        if (!diaDeHoy){
+            diaDeHoy = LocalDateTime.now()
+        }
         turno.cancelar();
+
+        boolean turnoCanceladoEnMenosDe72Horas = turno.fechaYHora < diaDeHoy.plusDays(3)
+
+        if (turnoCanceladoEnMenosDe72Horas){
+            turno.bloquearPaciente(this)
+        }
+
         turnos.remove(turno);
     }
 }

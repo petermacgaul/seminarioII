@@ -13,3 +13,7 @@ class TurnoNoDisponibleException extends ReservaDeTurnosException {
 @InheritConstructors
 class TurnoMismaEspecializacionException extends ReservaDeTurnosException {
 }
+
+@InheritConstructors
+class CancelarTurnoException extends RuntimeException {
+}
