@@ -12,120 +12,88 @@ class TurnoSpec extends Specification implements DomainUnitTest<Turno> {
     DateTimeFormatter dateTimeFormatter;
     Medico medico;
     Paciente paciente;
+    LocalDate fechaDeNacimiento;
 
     def setup() {
         dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        medico = new Medico("Maria", "Gonzalez", "36456612", "Clinico", "M12873BD")
-
-        LocalDate fechaDeNacimiento = LocalDate.parse("16/08/2002", dateFormatter);
-
-        paciente = new Paciente("Juan", "Perez", "39805131", "juanPerez@gmail.com", fechaDeNacimiento)
+        medico = new Medico("Juan", "Gomez", "36456612", "Clinico", "M12873BD")
+        fechaDeNacimiento = LocalDate.parse("16/08/2002", dateFormatter);
+        paciente = new Paciente("Maria", "Perez", "39805131", "juanPerez@gmail.com", fechaDeNacimiento)
     }
 
     def cleanup() {
     }
 
-    void "H2.1 - Paciente reserva un turno de un medico"() {
+    void "US1.1 - Reservar turno exitosamente"() {
 
         LocalDateTime fechaDelTurno = LocalDateTime.parse("16/08/2023 14:00:00", dateTimeFormatter);
 
-        given: "Dado un paciente, un medico y un turno"
-            Turno turno = medico.crearTurno(fechaDelTurno, "Hospital Italiano", 30)
+        given: "Dado que soy un paciente y un médico traumatólogo “Juan Gomez” y un turno del médico"
+        Turno turno = medico.crearTurno(fechaDelTurno, "Hospital Italiano", 30)
 
-        when: "cuando reservo un turno"
-            paciente.reservarTurno(turno)
+        when: "cuando reservo el turno"
+        paciente.reservarTurno(turno)
+
+        then: "veo el turno reservado a mi nombre"
+        assert paciente.turnos.size() == 1
+        assert turno.paciente != null
+        assert turno.paciente.nombre == paciente.nombre
+        assert turno.paciente.apellido == paciente.apellido
+    }
+
+    void "US1.2 - Reservar segundo turno de misma especialidad falla"() {
+
+        LocalDateTime fechaDelTurno = LocalDateTime.parse("16/08/2023 14:00:00", dateTimeFormatter);
+        LocalDateTime fechaDelOtroTurno = LocalDateTime.parse("17/08/2023 14:00:00", dateTimeFormatter);
+        Medico otroMedico = new Medico("Juan", "Gomez", "36456612", "Clinico", "M12873BD")
+
+        given: "Dado un paciente, un turno reservado a mi nombre, y un turno de la misma especialidad pero de otro medico"
+        Turno turno = medico.crearTurno(fechaDelTurno, "Hospital Italiano", 30)
+        Turno otroTurno = otroMedico.crearTurno(fechaDelOtroTurno, "Hospital Italiano", 30)
+        paciente.reservarTurno(turno)
+
+        when: "quiero sacar otro turno con el otro médico traumatólogo antes de que pase mi turno"
+        paciente.reservarTurno(otroTurno)
+
+        then: "me muestra un error que me dice que no puedo tener más de un turno por especialidad"
+        thrown(ReservaDeTurnosException)
+    }
+
+    void "US2.0 - Dado que soy un paciente, tengo un turno reservado, cuando cancelo el turno, entonces no veo más ese turno registrado."() {
+
+        LocalDateTime fechaDelTurno = LocalDateTime.parse("16/08/2023 14:00:00", dateTimeFormatter);
+        Turno turno = medico.crearTurno(fechaDelTurno, "Hospital Italiano", 30)
+
+        given: "Dado un paciente, un medico y un turno reservado por un paciente"
+        paciente.reservarTurno(turno)
+
+        when: "cuando el paciente cancela el turno"
+        paciente.cancelarTurno(turno)
+
+        then: "no veo mas el turno registrado"
+        assert paciente.turnos.size() == 0
+        assert turno.paciente == null
+    }
+
+    void "US2.1 - Dado que soy un paciente, tengo un turno reservado, cuando cancelo el turno reservado, entonces otro paciente puede reservarlo."() {
+
+        LocalDateTime fechaDelTurno = LocalDateTime.parse("16/08/2023 14:00:00", dateTimeFormatter);
+
+        Paciente otroPaciente = new Paciente("Romina", "Gonzalez", "48516356", "rominaGonzalez@gmail.com", fechaDeNacimiento)
+        Turno turno = medico.crearTurno(fechaDelTurno, "Hospital Italiano", 30)
+
+        given: "Dado un paciente, un medico y un turno reservado por el paciente"
+        paciente.reservarTurno(turno)
+
+        when: "cuando otro paciente reserva el mismo turno"
+        paciente.cancelarTurno(turno)
+        otroPaciente.reservarTurno(turno)
 
         then: "veo el turno reservado"
-            assert paciente.turnos.size() == 1
-            assert turno.paciente != null
-    }
-
-    void "H3.1 - Paciente reserva un turno de la misma especializacion el mismo mes da error"() {
-
-        LocalDateTime fechaDelTurno = LocalDateTime.parse("16/08/2023 14:00:00", dateTimeFormatter);
-
-        given: "Dado un paciente, un medico y un turno, e intento reservar un turno de la misma especialidad en el mismo mes"
-            Turno turno = medico.crearTurno(fechaDelTurno, "Hospital Italiano", 30)
-            paciente.reservarTurno(turno)
-
-        when: "cuando reservo un turno"
-            paciente.reservarTurno(turno)
-
-        then: "veo un error en el turno"
-            thrown(ReservaDeTurnosException)
-    }
-
-    void "H3.2 - Paciente reserva un turno de la misma especializacion con menos de mes de diferencia hacia atras"() {
-
-        LocalDateTime fechaDelTurno = LocalDateTime.parse("16/08/2023 14:00:00", dateTimeFormatter);
-        LocalDateTime fechaDelTurnoDelMesAnterior = LocalDateTime.parse("17/07/2023 14:00:00", dateTimeFormatter);
-
-        given: "Dado un paciente, un medico y un turno, e intento reservar un turno de la misma especialidad en el mismo mes"
-            Turno turno = medico.crearTurno(fechaDelTurno, "Hospital Italiano", 30)
-            Turno turnoDelMesAnterior = medico.crearTurno(fechaDelTurnoDelMesAnterior, "Hospital Italiano", 30)
-            paciente.reservarTurno(turno)
-
-        when: "cuando reservo un turno"
-            paciente.reservarTurno(turnoDelMesAnterior)
-
-        then: "obtengo un error"
-            thrown(ReservaDeTurnosException)
-    }
-
-    void "H3.3 - Paciente reserva un turno de la misma especializacion con menos de mes de diferencia hacia adelante"() {
-
-        LocalDateTime fechaDelTurno = LocalDateTime.parse("16/08/2023 14:00:00", dateTimeFormatter);
-        LocalDateTime fechaDelTurnoDelMesSiguiente = LocalDateTime.parse("15/09/2023 14:00:00", dateTimeFormatter);
-
-        given: "Dado un paciente, un medico y un turno, e intento reservar un turno de la misma especialidad en el mismo mes"
-            Turno turno = medico.crearTurno(fechaDelTurno, "Hospital Italiano", 30)
-            Turno turnoDelMesSiguiente = medico.crearTurno(fechaDelTurnoDelMesSiguiente, "Hospital Italiano", 30)
-            paciente.reservarTurno(turno)
-
-        when: "cuando reservo un turno"
-            paciente.reservarTurno(turnoDelMesSiguiente)
-
-        then: "obtengo un error"
-            thrown(ReservaDeTurnosException)
-    }
-
-    void "H4.1 - Paciente reserva un turno de la misma especializacion con mas de un mes de diferencia hacia atras"() {
-
-        LocalDateTime fechaDelTurno = LocalDateTime.parse("16/08/2023 14:00:00", dateTimeFormatter);
-        LocalDateTime fechaDelTurnoDelMesAnterior = LocalDateTime.parse("16/07/2023 14:00:00", dateTimeFormatter);
-
-        given: "Dado un paciente, un medico y un turno, e intento reservar un turno de la misma especialidad en el mismo mes"
-            Turno turno = medico.crearTurno(fechaDelTurno, "Hospital Italiano", 30)
-            Turno turnoDelMesAnterior = medico.crearTurno(fechaDelTurnoDelMesAnterior, "Hospital Italiano", 30)
-            paciente.reservarTurno(turno)
-
-        when: "cuando reservo un turno"
-            paciente.reservarTurno(turnoDelMesAnterior)
-
-        then: "veo el turno reservado"
-            assert paciente.turnos.size() == 2
-            assert turno.paciente != null
-            assert turnoDelMesAnterior.paciente != null
-    }
-
-    void "H5.1 - Paciente reserva un turno de la misma especializacion con mas de mes de diferencia hacia adelante"() {
-
-        LocalDateTime fechaDelTurno = LocalDateTime.parse("16/08/2023 14:00:00", dateTimeFormatter);
-        LocalDateTime fechaDelTurnoDelMesSiguiente = LocalDateTime.parse("17/09/2023 14:00:00", dateTimeFormatter);
-
-        given: "Dado un paciente, un medico y un turno, e intento reservar un turno de la misma especialidad en el mismo mes"
-            Turno turno = medico.crearTurno(fechaDelTurno, "Hospital Italiano", 30)
-            Turno turnoDelMesSiguiente = medico.crearTurno(fechaDelTurnoDelMesSiguiente, "Hospital Italiano", 30)
-            paciente.reservarTurno(turno)
-
-        when: "cuando reservo un turno"
-            paciente.reservarTurno(turnoDelMesSiguiente)
-
-        then: "veo el turno reservado"
-            assert paciente.turnos.size() == 2
-            assert turno.paciente != null
-            assert turnoDelMesSiguiente.paciente != null
+        assert otroPaciente.turnos.size() == 1
+        assert paciente.turnos.size() == 0
+        assert turno.paciente != null
     }
 
 }

@@ -41,4 +41,7 @@ class Turno {
         this.paciente == null
     }
 
+    void cancelar() {
+        this.paciente = null;
+    }
 }

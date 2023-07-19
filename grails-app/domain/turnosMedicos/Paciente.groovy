@@ -45,13 +45,7 @@ class Paciente {
         }
 
         boolean tengoTurnoDeMismaEspecialidadElMismoMes = turnos.any { Turno turnoReservado ->
-
-            LocalDateTime turnoReservadoUnMesAntes = turnoReservado.fechaYHora.minusMonths(1)
-            LocalDateTime turnoReservadoUnMesDespues = turnoReservado.fechaYHora.plusMonths(1)
-
             turnoReservado.medico.especialidad == turno.medico.especialidad
-                    && (turnoReservadoUnMesDespues < turno.fechaYHora || turnoReservadoUnMesAntes < turno.fechaYHora)
-                    && (turnoReservadoUnMesDespues > turno.fechaYHora || turnoReservadoUnMesAntes > turno.fechaYHora)
         }
 
         if (tengoTurnoDeMismaEspecialidadElMismoMes) throw new TurnoMismaEspecializacionException()
@@ -59,5 +53,10 @@ class Paciente {
         turno.paciente = this
         turnos << turno
         turno
+    }
+
+    void cancelarTurno(Turno turno) {
+        turno.cancelar();
+        turnos.remove(turno);
     }
 }
