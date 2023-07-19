@@ -11,7 +11,6 @@ class Paciente {
     String email
     LocalDate fechaDeNacimiento
     Set<Turno> turnos = []
-    //LocalDateTime diaDeHoy
 
     static hasMany = [
             turnos: Turno,
@@ -38,10 +37,12 @@ class Paciente {
         this.dni = dni
         this.email = email
         this.fechaDeNacimiento = fechaDeNacimiento
-        //this.diaDeHoy = LocalDateTime.now()
     }
 
-    Turno reservarTurno(Turno turno) {
+    Turno reservarTurno(Turno turno, LocalDateTime diaDeHoy = null) {
+        if (!diaDeHoy){
+            diaDeHoy = LocalDateTime.now()
+        }
 
         if (!turno.estaDisponible()){
             throw new TurnoNoDisponibleException();

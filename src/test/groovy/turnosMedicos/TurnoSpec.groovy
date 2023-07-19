@@ -104,17 +104,60 @@ class TurnoSpec extends Specification implements DomainUnitTest<Turno> {
         LocalDateTime fechaDelOtroTurno = LocalDateTime.parse("17/08/2023 14:00:00", dateTimeFormatter);
 
         Turno turno = medico.crearTurno(fechaDelTurno, "Hospital Italiano", 30)
-        Turno otroTurnoElMisMes = medico.crearTurno(fechaDelOtroTurno, "Hospital Italiano", 30)
+        Turno otroTurnoElMismoMes = medico.crearTurno(fechaDelOtroTurno, "Hospital Italiano", 30)
 
         given: "Dado un paciente y un turno cancelado por el paciente en menos de 72 horas"
-        paciente.reservarTurno(turno)
+        paciente.reservarTurno(turno, diaDeHoy)
         paciente.cancelarTurno(turno, diaDeHoy)
 
         when: "cuando reservo un turno del médico traumatólogo el mismo mes"
-        paciente.reservarTurno(otroTurnoElMisMes)
+        paciente.reservarTurno(otroTurnoElMismoMes, diaDeHoy)
 
         then: "entonces me muestra un error que no puedo tomar turnos de este médico durante este mes"
         thrown(PacienteBloqueadoException)
     }
 
+    void "US5.2 - Bloquear paciente - Dado que soy un paciente y cancelo el turno del médico traumatólogo en menos de 72 horas, cuando reservo un turno del médico traumatólogo el mismo mes, entonces la reserva es exitosa."() {
+
+        LocalDateTime diaDeHoy = LocalDateTime.parse("13/08/2023 14:00:01", dateTimeFormatter);
+
+        LocalDateTime fechaDelTurno = LocalDateTime.parse("16/08/2023 14:00:00", dateTimeFormatter);
+        LocalDateTime fechaDelOtroTurno = LocalDateTime.parse("01/09/2023 14:00:00", dateTimeFormatter);
+
+        Turno turno = medico.crearTurno(fechaDelTurno, "Hospital Italiano", 30)
+        Turno otroTurnoElMesSiguiente = medico.crearTurno(fechaDelOtroTurno, "Hospital Italiano", 30)
+
+        given: "Dado un paciente y un turno cancelado por el paciente en menos de 72 horas"
+        paciente.reservarTurno(turno, diaDeHoy)
+        paciente.cancelarTurno(turno, diaDeHoy)
+
+        when: "cuando reservo un turno del médico traumatólogo el mes siguiente"
+        paciente.reservarTurno(otroTurnoElMesSiguiente, diaDeHoy)
+
+        then: "entonces la reserva es exitosa"
+        assert paciente.turnos.size() == 1
+        assert turno.paciente == null
+        assert otroTurnoElMesSiguiente.paciente != null
+    }
+    void "US5.3 - Bloquear paciente - Dado que soy un paciente y tengo un turno para el médico traumatólogo, cuando cancelo el turno del médico traumatólogo 72 horas antes del turno, entonces se me avisa que no podre reservar turno con el traumatólogo durante ese mes y otro usuario puede reservar el turno"() {
+
+        LocalDateTime diaDeHoy = LocalDateTime.parse("13/08/2023 14:00:01", dateTimeFormatter);
+        LocalDateTime fechaDelTurno = LocalDateTime.parse("16/08/2023 14:00:00", dateTimeFormatter);
+        Turno turno = medico.crearTurno(fechaDelTurno, "Hospital Italiano", 30)
+        Paciente otroPaciente = new Paciente("Romina", "Gonzalez", "48516356", "rominaGonzalez@gmail.com", fechaDeNacimiento)
+
+        given: "Dado dos pacientes y un turno cancelado por el primer paciente en menos de 72 horas"
+        paciente.reservarTurno(turno, diaDeHoy)
+        paciente.cancelarTurno(turno, diaDeHoy)
+
+        when: "cuando el otro paciente reserva el turno del médico traumatólogo"
+        otroPaciente.reservarTurno(turno, diaDeHoy)
+
+        then: "entonces la reserva es exitosa"
+        assert otroPaciente.turnos.size() == 1
+        assert paciente.turnos.size() == 0
+        assert turno.paciente != null
+        assert turno.paciente != paciente
+        assert turno.paciente == otroPaciente
+    }
 }

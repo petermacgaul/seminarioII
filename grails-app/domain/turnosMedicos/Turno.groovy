@@ -1,5 +1,7 @@
 package turnosMedicos
 
+import org.apache.tools.ant.taskdefs.Local
+
 import java.time.LocalDateTime
 
 class Turno {
@@ -47,12 +49,12 @@ class Turno {
     }
 
     Boolean pacienteEstaBloqueado(Paciente paciente) {
-        this.medico.pacienteEstaBloqueado(paciente)
+        this.medico.pacienteEstaBloqueado(paciente, this.fechaYHora)
     }
 
-    Boolean pacienteEstaEnListaDeBloqueados(Paciente paciente) {
-        return pacientesBloqueados.any { Paciente pacienteBloqueado ->
-            pacienteBloqueado.id == paciente.id
+    Boolean pacienteEstaEnListaDeBloqueados(Paciente paciente, LocalDateTime diaDeHoy) {
+        return diaDeHoy.month == this.fechaYHora.month && pacientesBloqueados.any { Paciente pacienteBloqueado ->
+            pacienteBloqueado.dni == paciente.dni && pacienteBloqueado.id == paciente.id
         }
     }
 

@@ -45,9 +45,9 @@ class Medico {
         turno
     }
 
-    boolean pacienteEstaBloqueado(Paciente paciente) {
+    boolean pacienteEstaBloqueado(Paciente paciente, LocalDateTime diaDeHoy) {
         return turnos.any { Turno turno ->
-            turno.pacienteEstaEnListaDeBloqueados(paciente)
+            turno.pacienteEstaEnListaDeBloqueados(paciente, diaDeHoy)
         }
     }
 }
