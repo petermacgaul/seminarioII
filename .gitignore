@@ -1,3 +1,7 @@
 .idea
 .gradle
 build
+/gradle/caches/
+/gradle/native/
+/gradle/daemon/
+/gradle/wrapper/dists/
