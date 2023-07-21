@@ -1,4 +1,4 @@
-package turnosmedicos
+package turnosMedicos
 
 class BootStrap {
 

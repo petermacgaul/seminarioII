@@ -1,6 +1,5 @@
 package turnosMedicos
 
-import org.apache.tools.ant.taskdefs.Local
 
 import java.time.LocalDateTime
 
@@ -13,10 +12,14 @@ class Turno {
 
     String lugar
     Integer duracionEnMinutos
+    Double precio
     Set<Paciente> pacientesBloqueados = []
+    List<Estudio> estudios = []
+
 
     static hasMany = [
             pacientesBloqueados: Paciente,
+            estudios: Estudio,
     ]
 
     static constraints = {
@@ -24,6 +27,7 @@ class Turno {
         medico nullable: false
         lugar nullable: false, blank: false
         duracionEnMinutos nullable: false, blank: false, min: 0, max: 240
+        precio nullable:false, blank:false, min:0D
     }
 
 
@@ -43,6 +47,7 @@ class Turno {
         this.fechaYHora = fechaYHora
         this.lugar = lugar
         this.duracionEnMinutos = duracionEnMinutos
+        this.precio = 10000
     }
 
     Boolean estaDisponible() {
@@ -69,4 +74,16 @@ class Turno {
     void bloquearPaciente(Paciente paciente) {
         pacientesBloqueados << paciente
     }
+
+    Double calcularPrecio(Cobertura cobertura){
+        Double precioEstudios = calcularPrecioEstudios()
+        return cobertura.calcularPrecioTurno(precio + precioEstudios)
+    }
+
+    private Double calcularPrecioEstudios(){
+        Double precioEstudios = 0D
+        estudios.forEach(estudio -> precioEstudios = precioEstudios + estudio.precio)
+        return precioEstudios
+    }
+
 }

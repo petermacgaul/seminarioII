@@ -12,6 +12,7 @@ class Paciente {
     LocalDate fechaDeNacimiento
     Set<Turno> turnos = []
     Set<Turno> turnosCancelados = []
+    Cobertura cobertura
 
     static hasMany = [
             turnos: Turno,
@@ -38,6 +39,22 @@ class Paciente {
         this.dni = dni
         this.email = email
         this.fechaDeNacimiento = fechaDeNacimiento
+        this.cobertura = new Particular()
+    }
+
+    Paciente(String nombre, String apellido, String dni, String email, LocalDate fechaDeNacimiento, Cobertura cobertura) {
+        if (nombre == null) throw new PacienteCreacionException("El nombre es incorrecto")
+        if (apellido == null) throw new PacienteCreacionException("El apellido es incorrecto")
+        if (dni == null) throw new PacienteCreacionException("El dni es incorrecto")
+        if (email == null) throw new PacienteCreacionException("El email es incorrecto")
+        if (fechaDeNacimiento == null) throw new PacienteCreacionException("El fechaDeNacimiento es incorrecto")
+
+        this.nombre = nombre
+        this.apellido = apellido
+        this.dni = dni
+        this.email = email
+        this.fechaDeNacimiento = fechaDeNacimiento
+        this.cobertura = cobertura
     }
 
     Turno reservarTurno(Turno turno) {
@@ -72,5 +89,13 @@ class Paciente {
         }
 
         turnos.remove(turno);
+    }
+
+    Double obtenerPrecioTurno(Turno turno){
+        return turno.calcularPrecio(cobertura)
+    }
+
+    void realizarEstudio(Turno turno, Estudio estudio){
+        turno.estudios << estudio
     }
 }

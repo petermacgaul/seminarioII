@@ -1,5 +1,6 @@
 package turnosMedicos
 
+
 import java.time.LocalDateTime
 
 class Medico {
