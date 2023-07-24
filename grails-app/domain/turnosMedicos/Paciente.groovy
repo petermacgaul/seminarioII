@@ -11,13 +11,9 @@ class Paciente {
     String email
     LocalDate fechaDeNacimiento
     Set<Turno> turnos = []
-    Set<Turno> turnosCancelados = []
     Cobertura cobertura
 
-    static hasMany = [
-            turnos: Turno,
-            turnosCancelados: Turno,
-    ]
+    static hasMany = [ Turno ]
 
     static constraints = {
         nombre blank: false, nullable: false
@@ -27,20 +23,6 @@ class Paciente {
         fechaDeNacimiento nullable: true
     }
 
-    Paciente(String nombre, String apellido, String dni, String email, LocalDate fechaDeNacimiento) {
-        if (nombre == null) throw new PacienteCreacionException("El nombre es incorrecto")
-        if (apellido == null) throw new PacienteCreacionException("El apellido es incorrecto")
-        if (dni == null) throw new PacienteCreacionException("El dni es incorrecto")
-        if (email == null) throw new PacienteCreacionException("El email es incorrecto")
-        if (fechaDeNacimiento == null) throw new PacienteCreacionException("El fechaDeNacimiento es incorrecto")
-
-        this.nombre = nombre
-        this.apellido = apellido
-        this.dni = dni
-        this.email = email
-        this.fechaDeNacimiento = fechaDeNacimiento
-        this.cobertura = new Particular()
-    }
 
     Paciente(String nombre, String apellido, String dni, String email, LocalDate fechaDeNacimiento, Cobertura cobertura) {
         if (nombre == null) throw new PacienteCreacionException("El nombre es incorrecto")
@@ -57,6 +39,20 @@ class Paciente {
         this.cobertura = cobertura
     }
 
+    Paciente(String nombre, String apellido, String dni, String email, LocalDate fechaDeNacimiento) {
+        if (nombre == null) throw new PacienteCreacionException("El nombre es incorrecto")
+        if (apellido == null) throw new PacienteCreacionException("El apellido es incorrecto")
+        if (dni == null) throw new PacienteCreacionException("El dni es incorrecto")
+        if (email == null) throw new PacienteCreacionException("El email es incorrecto")
+        if (fechaDeNacimiento == null) throw new PacienteCreacionException("El fechaDeNacimiento es incorrecto")
+
+        this.nombre = nombre
+        this.apellido = apellido
+        this.dni = dni
+        this.email = email
+        this.fechaDeNacimiento = fechaDeNacimiento
+        this.cobertura = new Particular()
+    }
     Turno reservarTurno(Turno turno) {
 
         if (!turno.estaDisponible()){

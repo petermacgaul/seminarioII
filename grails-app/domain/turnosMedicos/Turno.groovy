@@ -16,6 +16,8 @@ class Turno {
     Set<Paciente> pacientesBloqueados = []
     List<Estudio> estudios = []
 
+    static belongsTo = [Medico, Paciente]
+
 
     static hasMany = [
             pacientesBloqueados: Paciente,
