@@ -32,7 +32,14 @@
                     </g:hasErrors>
                     <g:form resource="${this.medico}" method="POST">
                         <fieldset class="form">
-                            <f:all bean="medico"/>
+                            <g:set var="propertiesToDisplay" value="${['dni','nombre', 'apellido',  'matricula', 'especialidad']}" />
+
+                            <g:each var="propertyKey" in="${propertiesToDisplay}">
+                                <div class="fieldcontain">
+                                    <label for="${propertyKey}"><g:message code="medico.${propertyKey}.label" default="${propertyKey == 'dni' ? propertyKey.toUpperCase(): propertyKey.capitalize()}" /></label>
+                                    <g:textField name="${propertyKey}" value="${this.medico[propertyKey]}" />
+                                </div>
+                            </g:each>
                         </fieldset>
                         <fieldset class="buttons">
                             <g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />

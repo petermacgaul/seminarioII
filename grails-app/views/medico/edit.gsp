@@ -34,7 +34,11 @@
                     <g:form resource="${this.medico}" method="PUT">
                         <g:hiddenField name="version" value="${this.medico?.version}" />
                         <fieldset class="form">
-                            <f:all bean="medico"/>
+                            <div class="fieldcontain">
+                                <label for="dni"><g:message code="medico.dni.label" default="DNI" /></label>
+                                 <g:textField name="dni" value="${this.medico.dni.toUpperCase()}" />
+                             </div>
+                            <f:all bean="medico" except="dni" />
                         </fieldset>
                         <fieldset class="buttons">
                             <input class="save" type="submit" value="${message(code: 'default.button.update.label', default: 'Update')}" />
