@@ -32,7 +32,9 @@
                     </g:hasErrors>
                     <g:form resource="${this.paciente}" method="POST">
                         <fieldset class="form">
-                            <f:all bean="paciente"/>
+                            <label for="fechaDeNacimiento"><g:message code="Fecha de nacimiento"/></label>
+                            <g:datePicker name="fechaDeNacimiento" value="${this.paciente.fechaDeNacimiento}" />
+                            <f:all bean="paciente" except="['fechaDeNacimiento']"/>
                         </fieldset>
                         <fieldset class="buttons">
                             <g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />

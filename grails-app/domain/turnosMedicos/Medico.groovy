@@ -40,8 +40,8 @@ class Medico {
         this.matricula = matricula
     }
 
-    Turno crearTurno(LocalDateTime fechaYHora, String lugar, Integer duracionEnMinutos) {
-        Turno turno = new Turno(this, fechaYHora, lugar, duracionEnMinutos)
+    Turno crearTurno(LocalDateTime fecha, String lugar, Integer duracionEnMinutos) {
+        Turno turno = new Turno(this, fecha, lugar, duracionEnMinutos)
         turnos << turno
         turno
     }

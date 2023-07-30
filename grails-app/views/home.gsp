@@ -18,7 +18,7 @@
         }
 
     </style>
-    <h1>Bienvenido a Nuestro Sitio Web</h1>
+    <h1>Bienvenido a Turnos Tedicos</h1>
     <p>
         ¡Gracias por visitar nuestro sitio web! ¡Nos alegra tenerte aquí!
     </p>

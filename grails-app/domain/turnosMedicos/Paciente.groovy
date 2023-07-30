@@ -78,7 +78,7 @@ class Paciente {
         }
         turno.cancelar();
 
-        boolean turnoCanceladoEnMenosDe72Horas = turno.fechaYHora < diaDeHoy.plusDays(3)
+        boolean turnoCanceladoEnMenosDe72Horas = turno.fecha < diaDeHoy.plusDays(3)
 
         if (turnoCanceladoEnMenosDe72Horas){
             turno.bloquearPaciente(this)

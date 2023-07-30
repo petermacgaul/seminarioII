@@ -32,14 +32,17 @@
                     </ul>
                     </g:hasErrors>
                     <g:form resource="${this.medico}" method="PUT">
-                        <g:hiddenField name="version" value="${this.medico?.version}" />
                         <fieldset class="form">
-                            <div class="fieldcontain">
-                                <label for="dni"><g:message code="medico.dni.label" default="DNI" /></label>
-                                 <g:textField name="dni" value="${this.medico.dni.toUpperCase()}" />
-                             </div>
-                            <f:all bean="medico" except="dni" />
+                            <g:set var="propertiesToDisplay" value="${['dni','nombre', 'apellido',  'matricula', 'especialidad']}" />
+
+                            <g:each var="propertyKey" in="${propertiesToDisplay}">
+                                <div class="fieldcontain">
+                                    <label for="${propertyKey}"><g:message code="medico.${propertyKey}.label" default="${propertyKey == 'dni' ? propertyKey.toUpperCase(): propertyKey.capitalize()}" /></label>
+                                    <g:textField name="${propertyKey}" value="${this.medico[propertyKey]}" />
+                                </div>
+                            </g:each>
                         </fieldset>
+
                         <fieldset class="buttons">
                             <input class="save" type="submit" value="${message(code: 'default.button.update.label', default: 'Update')}" />
                         </fieldset>

@@ -18,11 +18,11 @@ class TurnoController {
     def crearTurno() {
 
         Medico medico = Medico.get(params.medico)
-        LocalDateTime fechaYHoraDelTurno = LocalDateTime.parse(params.fechaYHoraDelTurno, dateTimeFormatter);
+        LocalDateTime fechaDelTurno = LocalDateTime.parse(params.fechaDelTurno, dateTimeFormatter);
 
         Turno turno = new Turno(
                 medico: medico,
-                fechaYHora: fechaYHoraDelTurno,
+                fecha: fechaDelTurno,
                 lugar: params.lugar,
                 duracionEnMinutos: params.duracion,
         ).save(failOnError: true)

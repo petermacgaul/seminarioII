@@ -8,7 +8,7 @@ class Turno {
     Medico medico
     Paciente paciente
 
-    LocalDateTime fechaYHora
+    LocalDateTime fecha
 
     String lugar
     Integer duracionEnMinutos
@@ -25,17 +25,19 @@ class Turno {
     ]
 
     static constraints = {
-        fechaYHora nullable: true
+        fecha nullable: true
         medico nullable: false
+        paciente nullable: true
         lugar nullable: false, blank: false
         duracionEnMinutos nullable: false, blank: false, min: 0, max: 240
         precio nullable:false, blank:false, min:0D
     }
 
 
-    Turno(Medico medico, LocalDateTime fechaYHora, String lugar, Integer duracionEnMinutos) {
+    Turno(Medico medico, LocalDateTime fecha, String lugar, Integer duracionEnMinutos) {
         if (medico == null) throw new TurnoCreacionException("medico no puede ser vacio")
-        if (fechaYHora == null) throw new TurnoCreacionException("fechaYHora no puede ser vacio")
+        if (fecha == null) throw new TurnoCreacionException("fecha no puede ser vacio")
+        if (fecha < LocalDateTime.now()) throw new TurnoCreacionException("La fecha no puede ser anterior al dia de hoy")
         if (lugar == null) throw new TurnoCreacionException("lugar no puede ser vacio")
         if (duracionEnMinutos == null) throw new TurnoCreacionException("duracionEnMinutos no puede ser vacio")
 
@@ -46,7 +48,7 @@ class Turno {
         // Duracion maxima
 
         this.medico = medico
-        this.fechaYHora = fechaYHora
+        this.fecha = fecha
         this.lugar = lugar
         this.duracionEnMinutos = duracionEnMinutos
         this.precio = 10000
@@ -57,11 +59,11 @@ class Turno {
     }
 
     Boolean pacienteEstaBloqueado(Paciente paciente) {
-        this.medico.pacienteEstaBloqueado(paciente, this.fechaYHora)
+        this.medico.pacienteEstaBloqueado(paciente, this.fecha)
     }
 
     Boolean pacienteEstaEnListaDeBloqueados(Paciente paciente, LocalDateTime diaDeHoy) {
-        return diaDeHoy.month == this.fechaYHora.month && pacientesBloqueados.any { Paciente pacienteBloqueado ->
+        return diaDeHoy.month == this.fecha.month && pacientesBloqueados.any { Paciente pacienteBloqueado ->
             pacienteBloqueado.dni == paciente.dni
         }
     }
