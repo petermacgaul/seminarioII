@@ -2,6 +2,7 @@ package turnosMedicos
 
 import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.*
+import turnosMedicos.Particular
 
 class PacienteController {
 
@@ -19,7 +20,8 @@ class PacienteController {
     }
 
     def create() {
-        respond new Paciente(params)
+        def coberturaOptions = [Oschot: "Oschot", OSDO: "OSDO", Particular: "Particular"]
+        respond new Paciente(params), coberturaOptions: coberturaOptions
     }
 
     def save(Paciente paciente) {

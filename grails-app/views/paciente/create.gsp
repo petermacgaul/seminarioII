@@ -32,9 +32,30 @@
                     </g:hasErrors>
                     <g:form resource="${this.paciente}" method="POST">
                         <fieldset class="form">
-                            <label for="fechaDeNacimiento"><g:message code="Fecha de nacimiento"/></label>
-                            <g:datePicker name="fechaDeNacimiento" value="${this.paciente.fechaDeNacimiento}" />
-                            <f:all bean="paciente" except="['fechaDeNacimiento']"/>
+
+                        <g:set var="propertiesToDisplay" value="${['dni', 'nombre', 'apellido', 'email', 'fechaDeNacimiento']}" />
+
+                            <g:each var="propertyKey" in="${propertiesToDisplay}">
+                                <div class="fieldcontain">
+                                    <label for="${propertyKey}">
+                                        <g:message code="paciente.${propertyKey}.label"
+                                            default="${propertyKey == 'dni' ? propertyKey.toUpperCase() : propertyKey == 'fechaDeNacimiento' ? 'Fecha de nacimiento' : propertyKey.capitalize()}"/>
+                                        <span class="required-indicator">*</span>
+                                    </label>
+
+                                    <g:if test="${propertyKey == 'fechaDeNacimiento'}">
+                                        <!-- Calendario para seleccionar la fecha de nacimiento -->
+                                        <input type="date" name="${propertyKey}" value="${this.paciente[propertyKey]}" />
+                                    </g:if>
+
+                                    <g:else>
+                                        <!-- Texto normal para las otras propiedades -->
+                                        <input type="text" name="${propertyKey}" value="${this.paciente[propertyKey]}"/>
+                                    </g:else>
+                                </div>
+                            </g:each>
+
+                            <f:all bean="paciente" except="['dni', 'nombre', 'apellido', 'email', 'fechaDeNacimiento', 'turnos']"/>
                         </fieldset>
                         <fieldset class="buttons">
                             <g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />
