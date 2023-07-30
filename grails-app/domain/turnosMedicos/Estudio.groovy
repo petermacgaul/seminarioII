@@ -5,6 +5,11 @@ class Estudio {
     String tipo
     Double precio
 
+    @Override
+    String toString() {
+        return this.getClass().simpleName + " " + tipo
+    }
+
     static constraints = {
         paciente blank: false, nullable: false
         tipo blank: false, nullable: false

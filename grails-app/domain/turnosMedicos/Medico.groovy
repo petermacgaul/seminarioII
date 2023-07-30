@@ -51,4 +51,9 @@ class Medico {
             turno.pacienteEstaEnListaDeBloqueados(paciente, diaDeHoy)
         }
     }
+
+    @Override
+    String toString() {
+        return this.getClass().simpleName + " " + nombre + " " + apellido
+    }
 }

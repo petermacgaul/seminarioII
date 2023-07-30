@@ -94,4 +94,9 @@ class Paciente {
     void realizarEstudio(Turno turno, Estudio estudio){
         turno.estudios << estudio
     }
+
+    @Override
+    String toString() {
+        return this.getClass().simpleName + " " + nombre + " " + apellido
+    }
 }

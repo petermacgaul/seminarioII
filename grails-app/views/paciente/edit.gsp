@@ -34,8 +34,31 @@
                     <g:form resource="${this.paciente}" method="PUT">
                         <g:hiddenField name="version" value="${this.paciente?.version}" />
                         <fieldset class="form">
-                            <f:all bean="paciente"/>
-                        </fieldset>
+<g:set var="propertiesToDisplay" value="${['dni', 'nombre', 'apellido', 'email', 'fechaDeNacimiento']}" />
+
+                            <g:each var="propertyKey" in="${propertiesToDisplay}">
+                                <div class="fieldcontain">
+                                    <label for="${propertyKey}">
+                                        <g:message code="paciente.${propertyKey}.label"
+                                            default="${propertyKey == 'dni' ? propertyKey.toUpperCase() : propertyKey == 'fechaDeNacimiento' ? 'Fecha de nacimiento' : propertyKey.capitalize()}"/>
+                                        <span class="required-indicator">*</span>
+                                    </label>
+
+                                    <g:if test="${propertyKey == 'fechaDeNacimiento'}">
+                                        <!-- Calendario para seleccionar la fecha de nacimiento -->
+                                        <input type="date" name="${propertyKey}" value="${this.paciente[propertyKey]}" />
+                                    </g:if>
+
+                                    <g:else>
+                                        <!-- Texto normal para las otras propiedades -->
+                                        <input type="text" name="${propertyKey}" value="${this.paciente[propertyKey]}"/>
+                                    </g:else>
+                                </div>
+                            </g:each>
+
+                            <f:all bean="paciente" except="['dni', 'nombre', 'apellido', 'email', 'fechaDeNacimiento', 'turnos']"/>
+                            <f:all bean="paciente" except="['dni', 'nombre', 'apellido', 'email', 'fechaDeNacimiento', 'cobertura']"/>
+
                         <fieldset class="buttons">
                             <input class="save" type="submit" value="${message(code: 'default.button.update.label', default: 'Update')}" />
                         </fieldset>

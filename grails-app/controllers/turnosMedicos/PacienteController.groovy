@@ -20,8 +20,7 @@ class PacienteController {
     }
 
     def create() {
-        def coberturaOptions = [Oschot: "Oschot", OSDO: "OSDO", Particular: "Particular"]
-        respond new Paciente(params), coberturaOptions: coberturaOptions
+        respond new Paciente(params)
     }
 
     def save(Paciente paciente) {
