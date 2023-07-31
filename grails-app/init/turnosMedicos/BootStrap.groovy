@@ -35,17 +35,28 @@ class BootStrap {
 
         Medico medico = new Medico("Juan", "Gomez", "36456612", "Clinico", "M12873BD")
         medico.save()
+
+        Medico medicoTraumatologo = new Medico("Sofia", "Jimenez", "26584123", "Traumatologo", "ASK456DF")
+        medicoTraumatologo.save()
+
+        Medico medicoObstetra = new Medico("Maria", "Gutierrez", "23554333", "Obstetra", "456DF151P")
+        medicoObstetra.save()
+
     }
 
     private void createTurno() {
 
         Medico medico = Medico.get(1)
+        Medico otroMedico = Medico.get(2)
 
         Turno turno = medico.crearTurno(LocalDateTime.now().plusDays(1), "Hospital Italiano", 30)
         turno.save()
 
         Turno otroTurno = medico.crearTurno(LocalDateTime.now().plusDays(4), "Consultorio Privado", 30)
         otroTurno.save()
+
+        Turno otroTurnoConOtroMedico = otroMedico.crearTurno(LocalDateTime.now().plusDays(4), "Las Lomas", 30)
+        otroTurnoConOtroMedico.save()
     }
 
 

@@ -15,39 +15,15 @@ class TurnoController {
 
     DateTimeFormatter dateTimeFormatter;
 
-    def crearTurno() {
-
-        Medico medico = Medico.get(params.medico)
-        LocalDateTime fechaDelTurno = LocalDateTime.parse(params.fechaDelTurno, dateTimeFormatter);
-
-        Turno turno = new Turno(
-                medico: medico,
-                fecha: fechaDelTurno,
-                lugar: params.lugar,
-                duracionEnMinutos: params.duracion,
-        ).save(failOnError: true)
-
-        render "Medico crea el turno ${turno}"
-    }
-
-    def reservarTurno() {
-
-        Paciente paciente = Paciente.get(params.paciente)
-        Turno turno = Turno.get(params.turno)
-
-        try {
-
-            turno.save(failOnError: true)
-            paciente.save(failOnError: true)
-            render "Paciente reserva el turno ${turno}"
-
-        } catch (ReservaDeTurnosException exception ) {
-            render "Error ${exception} al reservar el turno ${turno}."
+    def index(Integer max, Integer id) {
+        if (id == null){
+            params.max = Math.min(max ?: 10, 100)
+            respond turnoService.list(params), model:[turnoCount: turnoService.count()]
+        } else {
+            Medico medico = Medico.get(id)
+            def turnoList = Turno.findAllByMedico(medico)
+            respond(turnoList: turnoList, medico: medico)
         }
-    }
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond turnoService.list(params), model:[turnoCount: turnoService.count()]
     }
 
     def show(Long id) {

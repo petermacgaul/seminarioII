@@ -56,6 +56,6 @@ class Medico {
 
     @Override
     String toString() {
-        return nombre + " " + apellido
+        return nombre + " " + apellido + " " + especialidad
     }
 }

@@ -24,6 +24,7 @@
         </button>
 
         <div class="collapse navbar-collapse" aria-expanded="false" style="height: 0.8px;" id="navbarContent">
+
             <ul class="nav navbar-nav ml-auto">
                 <g:pageProperty name="page.nav"/>
             </ul>
@@ -35,6 +36,13 @@
 
 <div class="footer" role="contentinfo">
     <div class="container-fluid">
+        <g:if test="${(request.getRequestURL()).contains('medico')}">
+            <p>Esta logeado como Medico</p>
+        </g:if>
+        <g:if test="${(request.getRequestURL()).contains('paciente')}">
+            <p>Esta logeado como Paciente</p>
+        </g:if>
+
     </div>
 </div>
 

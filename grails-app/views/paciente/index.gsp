@@ -47,7 +47,7 @@
                                     <td>${paciente.cobertura}</td>
 
                                     <td>
-                                        <a href="${createLink(controller: 'turnoPaciente', action: 'index', id: paciente.id)}" class="btn btn-primary">Turnos</a>
+                                        <a href="${createLink(controller: 'turnoPaciente', action: 'index', id: paciente.id)}" style="text-decoration: none;" class="btn btn-primary">Turnos</a>
                                     </td>
                                 </tr>
                             </g:each>

@@ -29,7 +29,7 @@ class Turno {
     static constraints = {
         fecha nullable: false
         medico nullable: false
-        paciente nullable: true, unique: true
+        paciente nullable: true
         lugar nullable: false, blank: false
         duracionEnMinutos nullable: false, blank: false, min: 0, max: 240
         precio nullable:false, blank:false, min:0D

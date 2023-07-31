@@ -15,7 +15,6 @@
                         <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
                         <li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
                         <li><a class="list" href="${createLink(uri: '/medico/turnos')}"><g:message code="Listado de turnos"/></a></li>
-                        <li><a class="create" href="${createLink(uri: '/turno/create')}"><g:message code="Nuevo turno"/></a></li>
                     </ul>
                 </div>
             </section>
@@ -25,7 +24,33 @@
                     <g:if test="${flash.message}">
                         <div class="message" role="status">${flash.message}</div>
                     </g:if>
-                    <f:table collection="${medicoList}" properties="nombre,apellido,dni,matricula,especialidad"/>
+
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Especialidad</th>
+                            <th>DNI</th>
+                            <th>Matricula</th>
+                            <th>Accion</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <g:each var="medico" in="${medicoList}">
+
+                            <tr>
+                                <td>${medico.nombre} ${medico.apellido}</td>
+                                <td>${medico.especialidad}</td>
+                                <td>${medico.dni}</td>
+                                <td>${medico.matricula}</td>
+                                <td>
+                                    <a href="${createLink(controller: 'turno', action: 'index', id: medico.id)}" style="text-decoration: none;" class="btn btn-primary">Turnos</a>
+                                </td>
+                            </tr>
+                        </g:each>
+                        </tbody>
+                    </table>
 
                     <g:if test="${medicoCount > params.int('max')}">
                     <div class="pagination">
