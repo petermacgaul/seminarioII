@@ -49,10 +49,6 @@ class TurnoPacienteController {
         Paciente paciente = Paciente.get(id)
 
         def turnoList = Turno.findAllByPacienteIsNullOrPaciente(paciente)
-        turnoList.collect {
-            it.precio = paciente.obtenerPrecioTurno(it)
-            it
-        }
 
         respond(turnoList: turnoList, paciente: paciente)
     }
