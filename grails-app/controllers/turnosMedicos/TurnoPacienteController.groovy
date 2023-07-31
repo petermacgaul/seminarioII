@@ -30,7 +30,6 @@ class TurnoPacienteController {
 
             turno.save(failOnError: true)
             paciente.save(failOnError: true)
-
             flash.message = "Turno Reservado!"
 
         } catch (ReservaDeTurnosException exception ) {

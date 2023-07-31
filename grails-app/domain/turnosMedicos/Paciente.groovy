@@ -92,9 +92,7 @@ class Paciente {
         return turno.calcularPrecio(cobertura)
     }
 
-    void realizarEstudio(Turno turno, Estudio estudio){
-        turno.estudios << estudio
-    }
+
 
     @Override
     String toString() {

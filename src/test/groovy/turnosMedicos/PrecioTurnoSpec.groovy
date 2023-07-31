@@ -74,10 +74,10 @@ class PrecioTurnoSpec extends Specification implements DomainUnitTest<Turno> {
 
         given: "Dado que soy un paciente y seleccione un turno de consulta con un traumatólogo que cuesta \$10000 y el traumatólogo agrega dos estudios con un costo de \$5000 cada uno "
         pacienteParticular.reservarTurno(turno)
-
+        medico.solicitarEstudio(turno, estudio)
         estudio = new Estudio(pacienteParticular, "Rayos")
-        pacienteParticular.realizarEstudio(turno, estudio)
-        pacienteParticular.realizarEstudio(turno, estudio)
+        medico.solicitarEstudio(turno, estudio)
+        medico.solicitarEstudio(turno, estudio)
 
         when: "consulto el precio del turno"
         then: "se me indica que el costo del turno es de \$20000"
@@ -89,8 +89,8 @@ class PrecioTurnoSpec extends Specification implements DomainUnitTest<Turno> {
         pacienteOSDO.reservarTurno(turno)
 
         estudio = new Estudio(pacienteOSDO, "Rayos")
-        pacienteOSDO.realizarEstudio(turno, estudio)
-        pacienteOSDO.realizarEstudio(turno, estudio)
+        medico.solicitarEstudio(turno, estudio)
+        medico.solicitarEstudio(turno, estudio)
 
         when: "consulto el precio del turno"
         then: " se me indica que la obra social cubre el costo del mismo"
@@ -102,8 +102,8 @@ class PrecioTurnoSpec extends Specification implements DomainUnitTest<Turno> {
         pacienteOSCHOT.reservarTurno(turno)
 
         estudio = new Estudio(pacienteOSCHOT, "Rayos")
-        pacienteOSCHOT.realizarEstudio(turno, estudio)
-        pacienteOSCHOT.realizarEstudio(turno, estudio)
+        medico.solicitarEstudio(turno, estudio)
+        medico.solicitarEstudio(turno, estudio)
 
         when: "consulto el precio del turno"
         then: "sse me indica que la obra social cubre el 80% del costo debiendo abonar \$4000"

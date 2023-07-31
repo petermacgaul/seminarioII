@@ -25,6 +25,10 @@ class Medico {
         especialidad nullable: true
     }
 
+    void solicitarEstudio(Turno turno, Estudio estudio){
+        turno.estudios << estudio
+    }
+
     Medico(String nombre, String apellido, String dni, String especialidad, String matricula) {
 
         if (nombre == null) throw new MedicoCreacionException()

@@ -59,4 +59,4 @@ class EstudioController {
             '*'{ render status: NOT_FOUND }
         }
     }
-}}
+}

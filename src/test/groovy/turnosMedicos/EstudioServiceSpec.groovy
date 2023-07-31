@@ -1,4 +1,4 @@
-package turnosmedicos
+package turnosMedicos
 
 import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
