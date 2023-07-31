@@ -13,6 +13,7 @@ import static org.springframework.http.HttpStatus.OK
 class TurnoPacienteController {
 
     TurnoService turnoService
+    PacienteService pacienteService
 
     static allowedMethods = [obtenerCosto: "GET", cancelarTurno: "POST", reservarTurno: "POST"]
 
@@ -27,15 +28,17 @@ class TurnoPacienteController {
         try {
 
             paciente.reservarTurno(turno)
+            paciente.addToTurnos(turno)
 
-            turno.save(failOnError: true)
-            paciente.save(failOnError: true)
             turnoService.save(turno)
+            pacienteService.save(paciente)
 
             flash.message = "Turno Reservado!"
 
         } catch (ReservaDeTurnosException exception ) {
-            flash.error = "Error ${exception} al reservar el turno ${turno}."
+            flash.error = "${exception.message} al reservar el turno ${turno}."
+        } catch (PacienteBloqueadoException exception ) {
+            flash.error = "Usted esta bloqueado para reservar el turno con ${turno}."
         } finally {
             redirect(action: 'index', id: params.pacienteId)
         }
@@ -58,22 +61,22 @@ class TurnoPacienteController {
         try {
 
             boolean pacienteBloqueado = paciente.elTurnoCanceladoEnMenosDe72Horas(turno);
+
             paciente.cancelarTurno(turno)
+            paciente.removeFromTurnos(turno)
+            turno.removeFrom('paciente', paciente)
 
-            turno.save(failOnError: true)
-            paciente.save(failOnError: true)
-
-
+            pacienteService.save(paciente)
             turnoService.save(turno)
 
             if (pacienteBloqueado){
-                flash.message = "Turno Cancelado en menos de 72 Hs. No podra sacar turno con el doctor durante este mes"
+                flash.warning = "Turno Cancelado en menos de 72 Hs. No podra sacar turno con el doctor durante este mes"
             } else {
                 flash.message = "Turno Cancelado!"
             }
 
-        } catch (ReservaDeTurnosException exception ) {
-            flash.error = "Error ${exception} al reservar el turno ${turno}."
+        } catch (CancelarTurnoException exception ) {
+            flash.error = "Error ${exception} al cancelar el turno ${turno}."
         } finally {
             redirect(action: 'index', id: params.pacienteId)
         }

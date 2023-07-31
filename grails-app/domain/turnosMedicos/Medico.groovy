@@ -13,9 +13,7 @@ class Medico {
 
     Set<Turno> turnos = []
 
-    static hasMany = [
-            turnos: Turno,
-    ]
+    static hasMany = [ turnos: Turno ]
 
     static constraints = {
         nombre blank: false, nullable: false
@@ -26,7 +24,7 @@ class Medico {
     }
 
     void solicitarEstudio(Turno turno, Estudio estudio){
-        turno.estudios << estudio
+        turno.estudios.add(estudio)
     }
 
     Medico(String nombre, String apellido, String dni, String especialidad, String matricula) {
@@ -46,7 +44,7 @@ class Medico {
 
     Turno crearTurno(LocalDateTime fecha, String lugar, Integer duracionEnMinutos) {
         Turno turno = new Turno(this, fecha, lugar, duracionEnMinutos)
-        turnos << turno
+        turnos.add(turno)
         turno
     }
 

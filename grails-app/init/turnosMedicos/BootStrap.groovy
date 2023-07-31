@@ -40,7 +40,6 @@ class BootStrap {
     private void createTurno() {
 
         Medico medico = Medico.get(1)
-        Paciente paciente = Paciente.get(1)
 
         Turno turno = medico.crearTurno(LocalDateTime.now().plusDays(1), "Hospital Italiano", 30)
         turno.save()

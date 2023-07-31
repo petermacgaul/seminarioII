@@ -13,7 +13,7 @@
                 <div class="nav" role="navigation">
                     <ul>
                         <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-                        <li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
+                        <li><a class="list" href="${createLink(uri: '/paciente')}"><g:message code="Pacientes"/></a></li>
                     </ul>
                 </div>
             </section>
@@ -21,7 +21,13 @@
                 <div id="list-turno" class="col-12 content scaffold-list" role="main">
                     <h1><g:message code="default.list.label" args="[entityName]" /></h1>
                     <g:if test="${flash.message}">
-                        <div class="message" role="status">${flash.message}</div>
+                        <div class="alert alert-success" role="alert">${flash.message}</div>
+                    </g:if>
+                    <g:if test="${flash.warning}">
+                        <div class="alert alert-warning" role="alert">${flash.warning}</div>
+                    </g:if>
+                    <g:if test="${flash.error}">
+                        <div class="alert alert-danger" role="alert">${flash.error}</div>
                     </g:if>
                     <table>
                         <thead>
@@ -43,7 +49,7 @@
                                 <td>${turno.lugar}</td>
                                 <td>${turno.precio}</td>
                                 <td>
-                                    <g:if test="${turno.paciente?.id == null}">
+                                    <g:if test="${turno.paciente == null}">
                                         <form method="post" action="${createLink(controller: 'turnoPaciente', action: 'reservarTurno')}">
                                             <input type="hidden" name="turnoId" value="${turno.id}" />
                                             <input type="hidden" name="pacienteId" value="${paciente.id}" />

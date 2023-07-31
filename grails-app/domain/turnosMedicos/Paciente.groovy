@@ -13,7 +13,8 @@ class Paciente {
     Set<Turno> turnos = []
     Cobertura cobertura
 
-    static hasMany = [ Turno ]
+    static hasMany = [ turnos: Turno ]
+    static mappedBy = [ turnos: "paciente" ]
 
     static constraints = {
         nombre blank: false, nullable: false
@@ -69,11 +70,11 @@ class Paciente {
         if (pacienteEstaBloqueado) throw new PacienteBloqueadoException()
 
         turno.paciente = this
-        turnos << turno
+        turnos.add(turno)
         turno
     }
 
-    void cancelarTurno(Turno turno, LocalDateTime diaDeHoy = null) {
+    Turno cancelarTurno(Turno turno, LocalDateTime diaDeHoy = null) {
 
         turno.cancelar();
 
@@ -82,6 +83,7 @@ class Paciente {
         }
 
         turnos.remove(turno);
+        turno
     }
 
     boolean elTurnoCanceladoEnMenosDe72Horas (Turno turno, LocalDateTime diaDeHoy = null) {

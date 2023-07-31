@@ -2,8 +2,11 @@ package turnosMedicos
 
 
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class Turno {
+
+    final static DateTimeFormatter CUSTOM_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     Medico medico
     Paciente paciente
@@ -16,8 +19,7 @@ class Turno {
     Set<Paciente> pacientesBloqueados = []
     List<Estudio> estudios = []
 
-    static belongsTo = [Medico, Paciente]
-
+    static belongsTo = [medico: Medico, paciente: Paciente]
 
     static hasMany = [
             pacientesBloqueados: Paciente,
@@ -25,9 +27,9 @@ class Turno {
     ]
 
     static constraints = {
-        fecha nullable: true
+        fecha nullable: false
         medico nullable: false
-        paciente nullable: true
+        paciente nullable: true, unique: true
         lugar nullable: false, blank: false
         duracionEnMinutos nullable: false, blank: false, min: 0, max: 240
         precio nullable:false, blank:false, min:0D
@@ -76,7 +78,7 @@ class Turno {
     }
 
     void bloquearPaciente(Paciente paciente) {
-        pacientesBloqueados << paciente
+        pacientesBloqueados.add(paciente)
     }
 
     Double calcularPrecio(Cobertura cobertura){
@@ -88,6 +90,16 @@ class Turno {
         Double precioEstudios = 0D
         estudios.forEach(estudio -> precioEstudios = precioEstudios + estudio.precio)
         return precioEstudios
+    }
+
+    @Override
+    String toString() {
+
+        if (this.id == null) {
+            return ''
+        }
+
+        return medico.toString() + " " + fecha.format(CUSTOM_FORMATTER)
     }
 
 }
