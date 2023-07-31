@@ -34,9 +34,10 @@ class TurnoPacienteController {
             render "Error ${exception} al reservar el turno ${turno}."
         }
     }
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond turnoService.list(params), model:[turnoCount: turnoService.count()]
+
+    def index(Integer max, Integer id) {
+        Paciente paciente = Paciente.get(id)
+        respond Turno.findAllByPacienteIsNullOrPaciente(paciente)
     }
 
     def show(Long id) {

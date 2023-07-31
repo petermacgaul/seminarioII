@@ -23,8 +23,29 @@
                     <g:if test="${flash.message}">
                         <div class="message" role="status">${flash.message}</div>
                     </g:if>
-                    <f:table collection="${turnoList}" />
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Medico</th>
+                            <th>Lugar</th>
+                            <th>Precio</th>
+                            <th>Accion</th>
+                        </tr>
+                        </thead>
 
+                        <tbody>
+                        <g:each var="turno" in="${turnoList}">
+
+                            <tr>
+                                <td>${turno.fecha}</td>
+                                <td>${turno.medico}</td>
+                                <td>${turno.lugar}</td>
+                                <td>${turno.precio}</td>
+                            </tr>
+                        </g:each>
+                        </tbody>
+                    </table>
                     <g:if test="${turnoCount > params.int('max')}">
                     <div class="pagination">
                         <g:paginate total="${turnoCount ?: 0}" />

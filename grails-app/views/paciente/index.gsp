@@ -23,7 +23,36 @@
                     <g:if test="${flash.message}">
                         <div class="message" role="status">${flash.message}</div>
                     </g:if>
-                    <f:table collection="${pacienteList}" />
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>DNI</th>
+                                <th>Email</th>
+                                <th>Fecha De Nacimiento</th>
+                                <th>Cobertura</th>
+                                <th>Accion</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <g:each var="paciente" in="${pacienteList}">
+
+                                <tr>
+                                    <td>${paciente.nombre} ${paciente.apellido}</td>
+                                    <td>${paciente.dni}</td>
+                                    <td>${paciente.email}</td>
+                                    <td>${paciente.fechaDeNacimiento}</td>
+                                    <td>${paciente.cobertura}</td>
+
+                                    <td>
+                                        <a href="${createLink(controller: 'turnoPaciente', action: 'index', id: paciente.id)}" class="btn btn-primary">Turnos</a>
+                                    </td>
+                                </tr>
+                            </g:each>
+                        </tbody>
+                    </table>
 
                     <g:if test="${pacienteCount > params.int('max')}">
                     <div class="pagination">
