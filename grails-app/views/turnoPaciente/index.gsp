@@ -51,7 +51,11 @@
                                         </form>
                                     </g:if>
                                     <g:else>
-                                        <a href="${createLink(controller: 'turnoPaciente', action: 'cancelarTurno', pacienteId: id, turnoId: turno.id)}" class="btn btn-danger">Cancelar</a>
+                                        <form method="post" action="${createLink(controller: 'turnoPaciente', action: 'cancelarTurno')}">
+                                            <input type="hidden" name="turnoId" value="${turno.id}" />
+                                            <input type="hidden" name="pacienteId" value="${paciente.id}" />
+                                            <button type="submit" class="btn btn-danger">Cancelar</button>
+                                        </form>
                                     </g:else>
                                 </td>
                             </tr>

@@ -74,21 +74,25 @@ class Paciente {
     }
 
     void cancelarTurno(Turno turno, LocalDateTime diaDeHoy = null) {
-        if (!diaDeHoy){
-            diaDeHoy = LocalDateTime.now()
-        }
+
         turno.cancelar();
 
-        boolean turnoCanceladoEnMenosDe72Horas = turno.fecha < diaDeHoy.plusDays(3)
-
-        if (turnoCanceladoEnMenosDe72Horas){
+        if (this.elTurnoCanceladoEnMenosDe72Horas(turno, diaDeHoy)){
             turno.bloquearPaciente(this)
         }
 
         turnos.remove(turno);
     }
 
-    Double obtenerPrecioTurno(Turno turno){
+    boolean elTurnoCanceladoEnMenosDe72Horas (Turno turno, LocalDateTime diaDeHoy = null) {
+        if (!diaDeHoy){
+            diaDeHoy = LocalDateTime.now()
+        }
+
+        return turno.fecha < diaDeHoy.plusDays(3)
+    }
+
+        Double obtenerPrecioTurno(Turno turno){
         return turno.calcularPrecio(cobertura)
     }
 

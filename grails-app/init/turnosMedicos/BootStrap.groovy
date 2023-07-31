@@ -45,11 +45,8 @@ class BootStrap {
         Turno turno = medico.crearTurno(LocalDateTime.now().plusDays(1), "Hospital Italiano", 30)
         turno.save()
 
-        Turno otroTurno = medico.crearTurno(LocalDateTime.now().plusDays(2), "Consultorio Privado", 30)
+        Turno otroTurno = medico.crearTurno(LocalDateTime.now().plusDays(4), "Consultorio Privado", 30)
         otroTurno.save()
-
-        paciente.reservarTurno(otroTurno).save(failOnError: true)
-        paciente.save(failOnError: true)
     }
 
 

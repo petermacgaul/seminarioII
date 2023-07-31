@@ -30,6 +30,8 @@ class TurnoPacienteController {
 
             turno.save(failOnError: true)
             paciente.save(failOnError: true)
+            turnoService.save(turno)
+
             flash.message = "Turno Reservado!"
 
         } catch (ReservaDeTurnosException exception ) {
@@ -55,14 +57,25 @@ class TurnoPacienteController {
 
         try {
 
+            boolean pacienteBloqueado = paciente.elTurnoCanceladoEnMenosDe72Horas(turno);
             paciente.cancelarTurno(turno)
 
             turno.save(failOnError: true)
             paciente.save(failOnError: true)
-            render "Paciente cancela el turno ${turno}"
+
+
+            turnoService.save(turno)
+
+            if (pacienteBloqueado){
+                flash.message = "Turno Cancelado en menos de 72 Hs. No podra sacar turno con el doctor durante este mes"
+            } else {
+                flash.message = "Turno Cancelado!"
+            }
 
         } catch (ReservaDeTurnosException exception ) {
-            render "Error ${exception} al cancelar el turno ${turno}."
+            flash.error = "Error ${exception} al reservar el turno ${turno}."
+        } finally {
+            redirect(action: 'index', id: params.pacienteId)
         }
     }
 

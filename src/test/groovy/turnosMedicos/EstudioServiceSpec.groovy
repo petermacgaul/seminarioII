@@ -2,6 +2,7 @@ package turnosMedicos
 
 import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
+import turnosMedicos.EstudioService
 
 class EstudioServiceSpec extends Specification implements ServiceUnitTest<EstudioService>{
 
@@ -11,8 +12,4 @@ class EstudioServiceSpec extends Specification implements ServiceUnitTest<Estudi
     def cleanup() {
     }
 
-    void "test something"() {
-        expect:"fix me"
-            true == false
-    }
 }
