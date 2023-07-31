@@ -53,6 +53,7 @@ class Paciente {
         this.fechaDeNacimiento = fechaDeNacimiento
         this.cobertura = new Particular()
     }
+
     Turno reservarTurno(Turno turno) {
 
         if (!turno.estaDisponible()){

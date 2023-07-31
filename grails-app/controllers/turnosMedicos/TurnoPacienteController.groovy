@@ -14,30 +14,36 @@ class TurnoPacienteController {
 
     TurnoService turnoService
 
-    static allowedMethods = [obtenerCosto: "GET", cancelarTurno: "PUT", reservarTurno: "PUT"]
+    static allowedMethods = [obtenerCosto: "GET", cancelarTurno: "POST", reservarTurno: "POST"]
 
     DateTimeFormatter dateTimeFormatter;
 
 
     def reservarTurno() {
 
-        Paciente paciente = Paciente.get(params.paciente)
-        Turno turno = Turno.get(params.turno)
+        Paciente paciente = Paciente.get(params.pacienteId)
+        Turno turno = Turno.get(params.turnoId)
 
         try {
 
+            paciente.reservarTurno(turno)
+
             turno.save(failOnError: true)
             paciente.save(failOnError: true)
-            render "Paciente reserva el turno ${turno}"
+
+            flash.message = "Turno Reservado!"
 
         } catch (ReservaDeTurnosException exception ) {
-            render "Error ${exception} al reservar el turno ${turno}."
+            flash.error = "Error ${exception} al reservar el turno ${turno}."
+        } finally {
+            redirect(action: 'index', id: params.pacienteId)
         }
     }
 
     def index(Integer max, Integer id) {
         Paciente paciente = Paciente.get(id)
-        respond Turno.findAllByPacienteIsNullOrPaciente(paciente)
+        def turnoList = Turno.findAllByPacienteIsNullOrPaciente(paciente)
+        respond(turnoList: turnoList, paciente: paciente)
     }
 
     def show(Long id) {
@@ -45,11 +51,12 @@ class TurnoPacienteController {
     }
 
     def cancelarTurno() {
-        Paciente paciente = Paciente.get(params.paciente)
-        Turno turno = Turno.get(params.turno)
-        paciente.cancelarTurno(turno)
+        Paciente paciente = Paciente.get(params.pacienteId)
+        Turno turno = Turno.get(params.turnoId)
 
         try {
+
+            paciente.cancelarTurno(turno)
 
             turno.save(failOnError: true)
             paciente.save(failOnError: true)

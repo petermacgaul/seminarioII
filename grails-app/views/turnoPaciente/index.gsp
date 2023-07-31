@@ -42,6 +42,18 @@
                                 <td>${turno.medico}</td>
                                 <td>${turno.lugar}</td>
                                 <td>${turno.precio}</td>
+                                <td>
+                                    <g:if test="${turno.paciente?.id == null}">
+                                        <form method="post" action="${createLink(controller: 'turnoPaciente', action: 'reservarTurno')}">
+                                            <input type="hidden" name="turnoId" value="${turno.id}" />
+                                            <input type="hidden" name="pacienteId" value="${paciente.id}" />
+                                            <button type="submit" class="btn btn-primary">Reservar</button>
+                                        </form>
+                                    </g:if>
+                                    <g:else>
+                                        <a href="${createLink(controller: 'turnoPaciente', action: 'cancelarTurno', pacienteId: id, turnoId: turno.id)}" class="btn btn-danger">Cancelar</a>
+                                    </g:else>
+                                </td>
                             </tr>
                         </g:each>
                         </tbody>
