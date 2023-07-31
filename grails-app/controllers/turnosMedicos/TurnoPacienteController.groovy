@@ -47,8 +47,13 @@ class TurnoPacienteController {
 
     def index(Integer max, Integer id) {
         Paciente paciente = Paciente.get(id)
+        paciente.cobertura = paciente.cobertura.refresh()
 
         def turnoList = Turno.findAllByPacienteIsNullOrPaciente(paciente)
+        turnoList.collect {
+            it.precio = paciente.obtenerPrecioTurno(it)
+            it
+        }
 
         respond(turnoList: turnoList, paciente: paciente)
     }
