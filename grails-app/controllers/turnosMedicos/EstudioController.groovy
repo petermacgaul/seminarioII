@@ -26,9 +26,9 @@ class EstudioController {
         }
 
         try {
-            estudioService.save(medico)
+            estudioService.save(estudio)
         } catch (ValidationException e) {
-            respond medico.errors, view:'create'
+            respond estudio.errors, view:'create'
             return
         }
 
@@ -45,9 +45,10 @@ class EstudioController {
         respond estudioService.get(id)
     }
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond estudioService.list(params), model:[estudioCount: estudioService.count()]
+    def index(Integer turnoId) {
+        Turno turno = Turno.get(turnoId)
+        def estudioList = Estudio.findAllByTurno(turno)
+        respond(estudioList: estudioList, turno: turno)
     }
 
     protected void notFound() {

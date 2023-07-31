@@ -15,13 +15,13 @@ class BootStrap {
 
     private void createCoberturas() {
 
-        Cobertura particular = new Particular()
+        Particular particular = new Particular()
         particular.save()
 
-        Cobertura oschot = new Oschot()
+        Oschot oschot = new Oschot()
         oschot.save()
 
-        Cobertura osdo = new Osdo()
+        Osdo osdo = new Osdo()
         osdo.save()
     }
 
@@ -29,6 +29,10 @@ class BootStrap {
 
         Paciente paciente = new Paciente("Maria", "Perez", "39805131", "juanPerez@gmail.com", LocalDate.now().minusYears(20))
         paciente.save()
+
+        Oschot cobertura = Cobertura.get(2)
+        Paciente pacienteConObraSocial = new Paciente("Pablo", "Juarez", "14568123", "pabloJuarez@gmail.com", LocalDate.now().minusYears(22), cobertura)
+        pacienteConObraSocial.save()
     }
 
     private void createMedico() {

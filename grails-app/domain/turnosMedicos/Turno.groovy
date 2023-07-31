@@ -20,6 +20,7 @@ class Turno {
     List<Estudio> estudios = []
 
     static belongsTo = [medico: Medico, paciente: Paciente]
+    static mappedBy = [ estudios: "turno" ]
 
     static hasMany = [
             pacientesBloqueados: Paciente,
@@ -81,9 +82,18 @@ class Turno {
         pacientesBloqueados.add(paciente)
     }
 
-    Double calcularPrecio(Cobertura cobertura){
+    Double calcularPrecio(Cobertura cobertura = null){
         Double precioEstudios = calcularPrecioEstudios()
-        return cobertura.calcularPrecioTurno(precio + precioEstudios)
+
+        if (paciente){
+            return paciente.cobertura.calcularPrecioTurno(precio + precioEstudios)
+        }
+
+        if (cobertura){
+            return cobertura.calcularPrecioTurno(precio + precioEstudios)
+        }
+
+        return precio + precioEstudios
     }
 
     private Double calcularPrecioEstudios(){

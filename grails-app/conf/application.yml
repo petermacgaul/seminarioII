@@ -23,6 +23,7 @@ spring:
             check-template-location: false
     devtools:
         restart:
+            enabled: false
             additional-exclude:
                 - '*.gsp'
                 - '**/*.gsp'

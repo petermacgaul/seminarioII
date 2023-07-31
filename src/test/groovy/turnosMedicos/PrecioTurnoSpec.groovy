@@ -75,7 +75,7 @@ class PrecioTurnoSpec extends Specification implements DomainUnitTest<Turno> {
         given: "Dado que soy un paciente y seleccione un turno de consulta con un traumatólogo que cuesta \$10000 y el traumatólogo agrega dos estudios con un costo de \$5000 cada uno "
         pacienteParticular.reservarTurno(turno)
         medico.solicitarEstudio(turno, estudio)
-        estudio = new Estudio(pacienteParticular, "Rayos")
+        estudio = new Estudio(turno, "Rayos")
         medico.solicitarEstudio(turno, estudio)
         medico.solicitarEstudio(turno, estudio)
 
@@ -88,7 +88,7 @@ class PrecioTurnoSpec extends Specification implements DomainUnitTest<Turno> {
         given: "Dado que soy un paciente y tengo obra social “OSDO” y seleccione un turno de consulta con un traumatólogo que cuesta \$10000 y el traumatólogo agrega dos estudios con un costo de \$5000 cada uno "
         pacienteOSDO.reservarTurno(turno)
 
-        estudio = new Estudio(pacienteOSDO, "Rayos")
+        estudio = new Estudio(turno, "Rayos")
         medico.solicitarEstudio(turno, estudio)
         medico.solicitarEstudio(turno, estudio)
 
@@ -101,7 +101,7 @@ class PrecioTurnoSpec extends Specification implements DomainUnitTest<Turno> {
         given: "Dado que soy un paciente y tengo obra social “OSCHOT” y seleccione un turno de consulta con un traumatólogo que cuesta \$10000 y el traumatólogo agrega dos estudios con un costo de \$5000 cada uno "
         pacienteOSCHOT.reservarTurno(turno)
 
-        estudio = new Estudio(pacienteOSCHOT, "Rayos")
+        estudio = new Estudio(turno, "Rayos")
         medico.solicitarEstudio(turno, estudio)
         medico.solicitarEstudio(turno, estudio)
 

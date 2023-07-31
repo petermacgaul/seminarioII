@@ -94,7 +94,7 @@ class Paciente {
         return turno.fecha < diaDeHoy.plusDays(3)
     }
 
-        Double obtenerPrecioTurno(Turno turno){
+    Double obtenerPrecioTurno(Turno turno){
         return turno.calcularPrecio(cobertura)
     }
 

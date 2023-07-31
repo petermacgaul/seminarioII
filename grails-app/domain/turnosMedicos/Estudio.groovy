@@ -1,9 +1,12 @@
 package turnosMedicos
 
 class Estudio {
+    Turno turno
     Paciente paciente
     String tipo
     Double precio
+
+    static belongsTo = [turno: Turno]
 
     @Override
     String toString() {
@@ -11,13 +14,15 @@ class Estudio {
     }
 
     static constraints = {
+        turno blank: false, nullable: false
         paciente blank: false, nullable: false
         tipo blank: false, nullable: false
         precio nullable: false, blank: false, min: 0D
     }
 
-    Estudio(Paciente paciente, String tipo){
-        this.paciente = paciente
+    Estudio(Turno turno, String tipo){
+        this.turno = turno
+        this.paciente = turno.paciente
         this.tipo = tipo
         this.precio = 5000
     }
