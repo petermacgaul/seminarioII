@@ -24,7 +24,36 @@
                     <g:if test="${flash.message}">
                         <div class="message" role="status">${flash.message}</div>
                     </g:if>
-                    <f:table collection="${turnoList}" />
+                     <table>
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Medico</th>
+                                    <th>Paciente</th>
+                                    <th>Lugar</th>
+                                    <th>Duracion en minutos</th>
+                                    <th>Precio</th>
+                                    <th>Estudios</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <g:each in="${turnoList}" var="turno">
+                                    <tr>
+                                        <td>${turno.fecha}</td>
+                                        <td>${turno.medico}</td>
+                                        <td>${turno.paciente}</td>
+                                        <td>${turno.lugar}</td>
+                                        <td>${turno.duracionEnMinutos}</td>
+                                        <td>${turno.precio}</td>
+                                        <td>
+                                            <g:link controller="medico" action="estudios" params="[turnoId: turno.id, action: 'create']">Ver estudios</g:link>
+
+                                            <g:link controller="medico" action="estudios" params="[turnoId: turno.id, action: 'create']">Agregar Estudio</g:link>
+                                        </td>
+                                    </tr>
+                                </g:each>
+                            </tbody>
+                    </table>
 
                     <g:if test="${turnoCount > params.int('max')}">
                     <div class="pagination">

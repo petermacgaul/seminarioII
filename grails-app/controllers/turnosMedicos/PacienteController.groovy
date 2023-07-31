@@ -2,7 +2,6 @@ package turnosMedicos
 
 import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.*
-import turnosMedicos.Particular
 
 class PacienteController {
 

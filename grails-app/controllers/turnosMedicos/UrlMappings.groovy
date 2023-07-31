@@ -7,6 +7,7 @@ class UrlMappings {
         "/paciente"(controller: 'paciente')
         "/medico/turnos"(controller: 'turno')
         "/paciente/turnos"(controller: 'turnoPaciente')
+        "/estudio"(controller: 'estudio')
 
 
         "/$controller/$action?/$id?(.$format)?"{

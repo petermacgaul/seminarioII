@@ -48,6 +48,7 @@ class MedicoController {
         respond medicoService.get(id)
     }
 
+
     def update(Medico medico) {
         if (medico == null) {
             notFound()
