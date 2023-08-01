@@ -62,6 +62,16 @@ class TurnoPacienteController {
         respond turnoService.get(id)
     }
 
+    def static obtenerCosto(Integer turnoId, Integer pacienteId) {
+        Paciente paciente = Paciente.get(pacienteId)
+        Turno turno = Turno.get(turnoId)
+        if (turno && turno.paciente && turno.paciente.id == pacienteId) {
+            respond turno.calcularPrecio(paciente.getCobertura())
+        } else {
+            respond "N/A"
+        }
+    }
+
     def cancelarTurno() {
         Paciente paciente = Paciente.get(params.pacienteId)
         Turno turno = Turno.get(params.turnoId)

@@ -35,7 +35,8 @@
                             <th>Fecha</th>
                             <th>Medico</th>
                             <th>Lugar</th>
-                            <th>Precio</th>
+                            <th>Precio consulta</th>
+                            <th>Precio total</th>
                             <th>Accion</th>
                         </tr>
                         </thead>
@@ -48,6 +49,14 @@
                                 <td>${turno.medico}</td>
                                 <td>${turno.lugar}</td>
                                 <td>${turno.precio}</td>
+                                <td>
+
+                                    <g:if test="${turno.paciente != null && turno.paciente.id == paciente.id}">
+                                        ${paciente.obtenerPrecioTurno(turno)}
+                                    </g:if>
+                                    <g:else>
+                                        "N/A"
+                                    </g:else>
                                 <td>
                                     <g:if test="${turno.paciente == null}">
                                         <form method="post" action="${createLink(controller: 'turnoPaciente', action: 'reservarTurno')}">
