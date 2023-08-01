@@ -46,8 +46,12 @@
                                         <td>${turno.duracionEnMinutos}</td>
                                         <td>${turno.precioTotal()}</td>
                                         <td>
-                                            <g:link controller="estudio" action="index" params="[turnoId: turno.id, action: 'create']">Ver estudios</g:link>
-                                            <g:link controller="estudio" action="create" params="[turnoId: turno.id, action: 'create']">Agregar Estudio</g:link>
+                                            <g:if test="${turno.estudios}">
+                                                <g:link controller="estudio" action="index" params="[turnoId: turno.id, action: 'create']">Ver estudios</g:link>
+                                            </g:if>
+                                            <g:else>
+                                                <g:link controller="estudio" action="create" params="[turnoId: turno.id, action: 'create']">Agregar estudio</g:link>
+                                            </g:else>
                                         </td>
                                     </tr>
                                 </g:each>
