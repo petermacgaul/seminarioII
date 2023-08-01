@@ -34,7 +34,7 @@
                     <g:form resource="${this.estudio}" method="PUT">
                         <g:hiddenField name="version" value="${this.estudio?.version}" />
                         <fieldset class="form">
-                            <f:all bean="estudio" except="paciente"/>
+                            <f:all bean="estudio"/>
                         </fieldset>
                         <fieldset class="buttons">
                             <input class="save" type="submit" value="${message(code: 'default.button.update.label', default: 'Update')}" />

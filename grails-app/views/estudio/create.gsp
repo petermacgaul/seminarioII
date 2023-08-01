@@ -32,7 +32,7 @@
                     </g:hasErrors>
                     <g:form resource="${this.estudio}" method="POST">
                         <fieldset class="form">
-                            <f:all bean="estudio" except="paciente"/>
+                            <f:all bean="estudio"/>
                         </fieldset>
                         <fieldset class="buttons">
                             <g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />

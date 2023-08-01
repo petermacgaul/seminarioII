@@ -51,7 +51,7 @@ class TurnoPacienteController {
 
         def turnoList = Turno.findAllByPacienteIsNullOrPaciente(paciente)
         turnoList.collect {
-            it.precio = paciente.obtenerPrecioTurno(it)
+            it.precioTotal = paciente.obtenerPrecioTurno(it)
             it
         }
 
@@ -60,16 +60,6 @@ class TurnoPacienteController {
 
     def show(Long id) {
         respond turnoService.get(id)
-    }
-
-    def static obtenerCosto(Integer turnoId, Integer pacienteId) {
-        Paciente paciente = Paciente.get(pacienteId)
-        Turno turno = Turno.get(turnoId)
-        if (turno && turno.paciente && turno.paciente.id == pacienteId) {
-            respond turno.calcularPrecio(paciente.getCobertura())
-        } else {
-            respond "N/A"
-        }
     }
 
     def cancelarTurno() {
@@ -98,12 +88,6 @@ class TurnoPacienteController {
         } finally {
             redirect(action: 'index', id: params.pacienteId)
         }
-    }
-
-    def obtenerCosto() {
-        Paciente paciente = Paciente.get(params.paciente)
-        Turno turno = Turno.get(params.turno)
-        respond  paciente.obtenerPrecioTurno(turno)
     }
 
     protected void notFound() {

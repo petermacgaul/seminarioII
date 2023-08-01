@@ -52,7 +52,7 @@
                                 <td>
 
                                     <g:if test="${turno.paciente != null && turno.paciente.id == paciente.id}">
-                                        ${paciente.obtenerPrecioTurno(turno)}
+                                        ${turno.precioTotal}
                                     </g:if>
                                     <g:else>
                                         "N/A"

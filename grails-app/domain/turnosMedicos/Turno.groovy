@@ -16,6 +16,7 @@ class Turno {
     String lugar
     Integer duracionEnMinutos
     Double precio
+    transient Double precioTotal
     Set<Paciente> pacientesBloqueados = []
     List<Estudio> estudios = []
 
