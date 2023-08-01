@@ -47,7 +47,6 @@
                                 <td>${turno.fecha}</td>
                                 <td>${turno.medico}</td>
                                 <td>${turno.lugar}</td>
-                                %{-- <td>${paciente.obtenerPrecioTurno(turno)}</td> --}%
                                 <td>${turno.precio}</td>
                                 <td>
                                     <g:if test="${turno.paciente == null}">

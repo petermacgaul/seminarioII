@@ -44,10 +44,9 @@
                                         <td>${turno.paciente}</td>
                                         <td>${turno.lugar}</td>
                                         <td>${turno.duracionEnMinutos}</td>
-                                        <td>${turno.calcularPrecio()}</td>
+                                        <td>${turno.precioTotal()}</td>
                                         <td>
                                             <g:link controller="estudio" action="index" params="[turnoId: turno.id, action: 'create']">Ver estudios</g:link>
-
                                             <g:link controller="estudio" action="create" params="[turnoId: turno.id, action: 'create']">Agregar Estudio</g:link>
                                         </td>
                                     </tr>

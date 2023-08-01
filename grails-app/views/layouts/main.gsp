@@ -42,7 +42,7 @@
         <g:if test="${(request.getRequestURL()).contains('paciente')}">
             <p>Esta logeado como Paciente</p>
         </g:if>
-
+        <a class="home" href="${createLink(uri: '/')}">Volver al home</a>
     </div>
 </div>
 

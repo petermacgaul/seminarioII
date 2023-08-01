@@ -83,16 +83,21 @@ class Turno {
     }
 
     Double calcularPrecio(Cobertura cobertura = null){
-        Double precioEstudios = calcularPrecioEstudios()
+        Double precioTotal = this.precioTotal()
 
         if (paciente){
-            return paciente.cobertura.calcularPrecioTurno(precio + precioEstudios)
+            return paciente.cobertura.calcularPrecioTurno(precioTotal)
         }
 
         if (cobertura){
-            return cobertura.calcularPrecioTurno(precio + precioEstudios)
+            return cobertura.calcularPrecioTurno(precioTotal)
         }
 
+        return precioTotal
+    }
+
+    Double precioTotal(){
+        Double precioEstudios = calcularPrecioEstudios()
         return precio + precioEstudios
     }
 
