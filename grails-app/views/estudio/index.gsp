@@ -12,7 +12,7 @@
                 <a href="#list-estudio" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
                 <div class="nav" role="navigation">
                     <ul>
-                        <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
+                        <li><a class="home" href="${createLink(uri: '/medico')}"><g:message code="Medicos"/></a></li>
                         <li><g:link class="create" action="create" params="[turnoId: turno.id]"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
                     </ul>
                 </div>
@@ -23,8 +23,28 @@
                     <g:if test="${flash.message}">
                         <div class="message" role="status">${flash.message}</div>
                     </g:if>
-                    <f:table collection="${estudioList}" />
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Turno</th>
+                            <th>Paciente</th>
+                            <th>Tipo</th>
+                            <th>Precio</th>
+                        </tr>
+                        </thead>
 
+                        <tbody>
+                        <g:each var="estudio" in="${estudioList}">
+
+                            <tr>
+                                <td>${estudio.turno}</td>
+                                <td>${estudio.paciente}</td>
+                                <td>${estudio.tipo}</td>
+                                <td>${estudio.precio}</td>
+                            </tr>
+                        </g:each>
+                        </tbody>
+                    </table>
                     <g:if test="${estudioCount > params.int('max')}">
                     <div class="pagination">
                         <g:paginate total="${estudioCount ?: 0}" />

@@ -51,7 +51,7 @@ class TurnoPacienteController {
 
         def turnoList = Turno.findAllByPacienteIsNullOrPaciente(paciente)
         turnoList.collect {
-            it.precioTotal = paciente.obtenerPrecioTurno(it)
+            paciente.obtenerPrecioTurno(it)
             it
         }
 

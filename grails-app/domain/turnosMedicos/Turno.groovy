@@ -15,8 +15,11 @@ class Turno {
 
     String lugar
     Integer duracionEnMinutos
+
     Double precio
     transient Double precioTotal
+    transient Double precioConsulta
+
     Set<Paciente> pacientesBloqueados = []
     List<Estudio> estudios = []
 
@@ -78,14 +81,20 @@ class Turno {
     }
 
     Double calcularPrecio(Cobertura cobertura = null){
-        Double precioTotal = this.precioTotal()
+        Double precioEstudios = calcularPrecioEstudios()
+        precioConsulta = precio
+        precioTotal = precio + precioEstudios
 
         if (paciente){
-            return paciente.cobertura.calcularPrecioTurno(precioTotal)
+            precioConsulta = paciente.cobertura.calcularPrecioTurno(precio)
+            Double precioEstudiosConDescuento = paciente.cobertura.calcularPrecioTurno(precioEstudios)
+            precioTotal = precioConsulta + precioEstudiosConDescuento
         }
 
         if (cobertura){
-            return cobertura.calcularPrecioTurno(precioTotal)
+            precioConsulta = cobertura.calcularPrecioTurno(precio)
+            Double precioEstudiosConDescuento = cobertura.calcularPrecioTurno(precioEstudios)
+            precioTotal = precioConsulta + precioEstudiosConDescuento
         }
 
         return precioTotal

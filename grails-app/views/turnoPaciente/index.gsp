@@ -12,7 +12,6 @@
                 <a href="#list-turno" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
                 <div class="nav" role="navigation">
                     <ul>
-                        <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
                         <li><a class="list" href="${createLink(uri: '/paciente')}"><g:message code="Pacientes"/></a></li>
                     </ul>
                 </div>
@@ -48,7 +47,7 @@
                                 <td>${turno.fecha}</td>
                                 <td>${turno.medico}</td>
                                 <td>${turno.lugar}</td>
-                                <td>${turno.precio}</td>
+                                <td>${turno.precioConsulta}</td>
                                 <td>
 
                                     <g:if test="${turno.paciente != null && turno.paciente.id == paciente.id}">
