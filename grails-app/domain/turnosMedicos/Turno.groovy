@@ -44,12 +44,6 @@ class Turno {
         if (lugar == null) throw new TurnoCreacionException("lugar no puede ser vacio")
         if (duracionEnMinutos == null) throw new TurnoCreacionException("duracionEnMinutos no puede ser vacio")
 
-        // ToDo: validar reglas de negocio que afecten al paciente y al medico
-
-        // Fechas mayores al dia de hoy
-        // Duracion positiva
-        // Duracion maxima
-
         this.medico = medico
         this.fecha = fecha
         this.lugar = lugar

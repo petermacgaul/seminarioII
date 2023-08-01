@@ -46,12 +46,12 @@
                                         <td>${turno.duracionEnMinutos}</td>
                                         <td>${turno.precioTotal()}</td>
                                         <td>
-                                            <g:if test="${turno.estudios}">
+                                            <g:if test="${turno.estudios && turno.paciente}">
                                                 <g:link controller="estudio" action="index" params="[turnoId: turno.id, action: 'create']">Ver estudios</g:link>
                                             </g:if>
-                                            <g:else>
+                                            <g:if test="${!turno.estudios && turno.paciente}">
                                                 <g:link controller="estudio" action="create" params="[turnoId: turno.id, action: 'create']">Agregar estudio</g:link>
-                                            </g:else>
+                                            </g:if>
                                         </td>
                                     </tr>
                                 </g:each>

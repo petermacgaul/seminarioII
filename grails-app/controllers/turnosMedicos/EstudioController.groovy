@@ -26,6 +26,8 @@ class EstudioController {
         }
 
         try {
+            estudio.addTo('paciente', estudio.turno.paciente)
+
             estudioService.save(estudio)
         } catch (ValidationException e) {
             respond estudio.errors, view:'create'
